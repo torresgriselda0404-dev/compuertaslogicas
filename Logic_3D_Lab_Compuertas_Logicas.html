@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Logic 3D Lab | Compuertas Lógicas</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;800&family=Poppins:wght@300;400;500;600;700&display=swap');
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:#020806;color:#fff;font-family:'Poppins',sans-serif;overflow-x:hidden}
+body::before{content:"";position:fixed;inset:0;pointer-events:none;background:linear-gradient(rgba(44,255,153,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(44,255,153,.035) 1px,transparent 1px);background-size:50px 50px;z-index:-2}
+body::after{content:"";position:fixed;width:600px;height:600px;border-radius:50%;background:rgba(0,255,140,.08);filter:blur(100px);top:10%;left:50%;transform:translateX(-50%);z-index:-3}
+nav{position:fixed;width:100%;top:0;z-index:1000;display:flex;justify-content:space-between;align-items:center;padding:18px 7%;background:rgba(2,10,7,.78);backdrop-filter:blur(18px);border-bottom:1px solid rgba(64,255,167,.2)}
+.logo{font-family:'Orbitron';color:#50ffae;font-weight:800;font-size:21px;letter-spacing:2px}
+nav ul{display:flex;gap:25px;list-style:none}
+nav a{color:#fff;text-decoration:none;font-size:14px;transition:.3s}
+nav a:hover{color:#50ffae}
+.hero{min-height:100vh;display:flex;justify-content:center;align-items:center;text-align:center;padding:130px 7% 80px;perspective:1200px}
+.hero-content{max-width:950px;transform-style:preserve-3d;animation:float 5s ease-in-out infinite}
+@keyframes float{0%,100%{transform:translateY(0) rotateX(0)}50%{transform:translateY(-12px) rotateX(2deg)}}
+.badge{display:inline-block;padding:9px 20px;border:1px solid #50ffae;border-radius:30px;color:#50ffae;font-size:13px;box-shadow:0 0 15px rgba(80,255,174,.2)}
+.hero h1{font-family:'Orbitron';font-size:clamp(42px,7vw,82px);line-height:1.05;margin:25px 0;text-shadow:0 0 10px rgba(80,255,174,.4),0 0 40px rgba(80,255,174,.15)}
+.hero h1 span{color:#50ffae}.hero p{color:#a9bbb3;max-width:700px;margin:auto;font-size:18px}
+.hero-buttons{margin-top:35px;display:flex;justify-content:center;gap:15px;flex-wrap:wrap}
+.btn{display:inline-block;padding:14px 28px;border-radius:30px;text-decoration:none;font-weight:600;transition:.3s}
+.primary{color:#00140b;background:#50ffae;box-shadow:0 0 30px rgba(80,255,174,.2)}
+.secondary{color:#50ffae;border:1px solid #50ffae}.btn:hover{transform:translateY(-5px) scale(1.03)}
+.chip{width:170px;height:170px;margin:70px auto 0;position:relative;transform-style:preserve-3d;transform:rotateX(55deg) rotateZ(35deg);animation:chipFloat 5s ease-in-out infinite;background:linear-gradient(145deg,#123a2a,#06150f);border:2px solid #50ffae;box-shadow:20px 25px 0 #03120c,0 0 35px rgba(80,255,174,.25),inset 0 0 30px rgba(80,255,174,.08)}
+@keyframes chipFloat{0%,100%{transform:rotateX(55deg) rotateZ(35deg) translateZ(0)}50%{transform:rotateX(55deg) rotateZ(35deg) translateZ(25px)}}
+.chip::before{content:"LOGIC";position:absolute;inset:35px;display:flex;align-items:center;justify-content:center;font-family:'Orbitron';color:#50ffae;border:1px solid #50ffae}
+.pin{position:absolute;width:28px;height:5px;background:#50ffae;box-shadow:0 0 10px #50ffae}.pin1{left:-28px;top:35px}.pin2{left:-28px;top:80px}.pin3{left:-28px;top:125px}.pin4{right:-28px;top:35px}.pin5{right:-28px;top:80px}.pin6{right:-28px;top:125px}
+section{padding:100px 7%}.title{text-align:center;font-family:'Orbitron';font-size:40px;margin-bottom:15px}.title span{color:#50ffae}.subtitle{text-align:center;color:#91a69c;max-width:700px;margin:0 auto 50px}
+.cards{max-width:1200px;margin:auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:25px;perspective:1000px}
+.card{padding:30px;min-height:240px;background:linear-gradient(145deg,rgba(20,60,43,.8),rgba(3,17,11,.9));border:1px solid rgba(80,255,174,.25);border-radius:20px;position:relative;transform-style:preserve-3d;transition:.5s;box-shadow:10px 10px 0 rgba(0,0,0,.3),inset 0 0 30px rgba(80,255,174,.03)}
+.card:hover{transform:rotateX(8deg) rotateY(-8deg) translateY(-12px);border-color:#50ffae;box-shadow:15px 20px 40px rgba(0,0,0,.5),0 0 25px rgba(80,255,174,.12)}
+.icon{font-family:'Orbitron';font-size:35px;color:#50ffae;margin-bottom:15px;text-shadow:0 0 15px rgba(80,255,174,.4)}.card h3{font-family:'Orbitron';margin-bottom:10px}.card p{color:#9fafa8}
+.simulators{max-width:1200px;margin:auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:25px}
+.simulator{background:rgba(8,28,19,.85);border:1px solid rgba(80,255,174,.25);border-radius:22px;padding:30px;transform-style:preserve-3d;transition:.4s;box-shadow:10px 10px 0 rgba(0,0,0,.25)}
+.simulator:hover{transform:translateY(-8px) rotateX(3deg);border-color:#50ffae}.simulator h3{font-family:'Orbitron';color:#50ffae;font-size:24px}
+.gate-symbol{width:150px;height:90px;margin:25px auto;display:flex;justify-content:center;align-items:center;border:2px solid #50ffae;border-radius:45%;color:#50ffae;font-family:'Orbitron';font-size:25px;box-shadow:0 0 25px rgba(80,255,174,.12),inset 0 0 20px rgba(80,255,174,.05)}
+.inputs{display:flex;justify-content:center;gap:15px;flex-wrap:wrap}.input-box{text-align:center}.input-box p{color:#9eafa8;margin-bottom:5px}
+.switch{width:70px;padding:12px;border:1px solid #406957;border-radius:12px;background:#10281d;color:white;font-family:'Orbitron';cursor:pointer;transition:.3s}.switch.active{background:#50ffae;color:#00150b;box-shadow:0 0 20px rgba(80,255,174,.35)}
+.output{text-align:center;margin-top:25px;padding:20px;background:#020b07;border-radius:15px;border:1px solid #173b2a}.output-value{font-family:'Orbitron';font-size:45px;color:#50ffae;text-shadow:0 0 15px rgba(80,255,174,.4)}
+.table-wrapper{max-width:900px;margin:auto;overflow-x:auto}table{width:100%;border-collapse:collapse;background:#081c13;border-radius:15px;overflow:hidden}th,td{padding:15px;text-align:center;border-bottom:1px solid #183c2c}th{background:#123d2a;color:#50ffae}
+.quiz{max-width:800px;margin:auto;background:#081c13;border:1px solid rgba(80,255,174,.2);border-radius:22px;padding:35px}.question{margin-bottom:30px}.question h3{margin-bottom:12px}.option{display:block;padding:12px;margin:8px 0;background:#0d281c;border-radius:10px;cursor:pointer;transition:.3s}.option:hover{background:#143c29}.quiz button{width:100%;padding:15px;border:0;border-radius:30px;background:#50ffae;font-weight:bold;cursor:pointer}#score{text-align:center;color:#50ffae;margin-top:20px;font-size:20px}
+footer{padding:50px 7%;text-align:center;background:#010604;border-top:1px solid #173c2b;color:#758980}footer strong{color:#50ffae}
+@media(max-width:700px){nav{flex-direction:column;gap:10px}nav ul{gap:12px;font-size:12px}.hero{padding-top:170px}.title{font-size:30px}section{padding:70px 5%}}
+</style>
+</head>
+<body>
+<nav><div class="logo">⚡ LOGIC 3D LAB</div><ul><li><a href="#inicio">Inicio</a></li><li><a href="#teoria">Teoría</a></li><li><a href="#simuladores">Simuladores</a></li><li><a href="#tabla">Tablas</a></li><li><a href="#quiz">Quiz</a></li></ul></nav>
+
+<header class="hero" id="inicio">
+<div class="hero-content">
+<div class="badge">INFORMÁTICA • NOVENO GRADO</div>
+<h1>COMPUERTAS <span>LÓGICAS</span></h1>
+<p>Bienvenido al laboratorio digital donde podrás aprender, experimentar y descubrir cómo funcionan las compuertas lógicas.</p>
+<div class="hero-buttons"><a href="#simuladores" class="btn primary">⚡ Entrar al laboratorio</a><a href="#teoria" class="btn secondary">📚 Aprender</a></div>
+<div class="chip"><div class="pin pin1"></div><div class="pin pin2"></div><div class="pin pin3"></div><div class="pin pin4"></div><div class="pin pin5"></div><div class="pin pin6"></div></div>
+</div>
+</header>
+
+<section id="teoria">
+<h2 class="title">¿Qué son las <span>compuertas?</span></h2>
+<p class="subtitle">Son componentes fundamentales de la electrónica digital que procesan valores binarios.</p>
+<div class="cards">
+<div class="card"><div class="icon">01</div><h3>Lógica binaria</h3><p>Los circuitos digitales trabajan principalmente con dos estados: 0 y 1.</p></div>
+<div class="card"><div class="icon">AND</div><h3>Operaciones</h3><p>Las compuertas realizan operaciones lógicas utilizando una o varias entradas.</p></div>
+<div class="card"><div class="icon">CPU</div><h3>Computación</h3><p>Las compuertas son utilizadas para construir circuitos digitales más complejos.</p></div>
+</div>
+</section>
+
+<section>
+<h2 class="title">Principales <span>compuertas</span></h2>
+<p class="subtitle">Conoce las operaciones lógicas básicas.</p>
+<div class="cards">
+<div class="card"><div class="icon">AND</div><h3>AND</h3><p>Produce 1 solamente cuando todas las entradas son 1.</p></div>
+<div class="card"><div class="icon">OR</div><h3>OR</h3><p>Produce 1 cuando al menos una entrada es 1.</p></div>
+<div class="card"><div class="icon">NOT</div><h3>NOT</h3><p>Invierte el valor de la entrada.</p></div>
+<div class="card"><div class="icon">XOR</div><h3>XOR</h3><p>Produce 1 cuando las entradas son diferentes.</p></div>
+<div class="card"><div class="icon">NAND</div><h3>NAND</h3><p>Es la negación de la compuerta AND.</p></div>
+<div class="card"><div class="icon">NOR</div><h3>NOR</h3><p>Es la negación de la compuerta OR.</p></div>
+</div>
+</section>
+
+<section id="simuladores">
+<h2 class="title">Laboratorio <span>3D</span></h2>
+<p class="subtitle">Activa y desactiva las entradas para comprobar cómo funciona cada compuerta.</p>
+<div class="simulators">
+
+<script>
+const sim=[
+["AND","andA","andB","andOutput"],["OR","orA","orB","orOutput"],
+["XOR","xorA","xorB","xorOutput"],["NAND","nandA","nandB","nandOutput"],
+["NOR","norA","norB","norOutput"]
+];
+for(const [name,a,b,out] of sim){
+document.write(`<div class="simulator"><h3>${name}</h3><div class="gate-symbol">${name}</div><div class="inputs">
+<div class="input-box"><p>A</p><button class="switch" onclick="changeInput('${a}',this)">0</button></div>
+<div class="input-box"><p>B</p><button class="switch" onclick="changeInput('${b}',this)">0</button></div>
+</div><div class="output">SALIDA<div class="output-value" id="${out}">${name==="NAND"||name==="NOR"?1:0}</div></div></div>`);
+}
+</script>
+
+<div class="simulator"><h3>NOT</h3><div class="gate-symbol">NOT</div><div class="inputs"><div class="input-box"><p>Entrada</p><button class="switch" onclick="changeInput('notA',this)">0</button></div></div><div class="output">SALIDA<div class="output-value" id="notOutput">1</div></div></div>
+</div>
+</section>
+
+<section id="tabla">
+<h2 class="title">Tabla de verdad <span>AND / OR / XOR</span></h2>
+<p class="subtitle">Todas las combinaciones posibles de dos entradas.</p>
+<div class="table-wrapper"><table><tr><th>A</th><th>B</th><th>AND</th><th>OR</th><th>XOR</th></tr><tr><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td></tr><tr><td>0</td><td>1</td><td>0</td><td>1</td><td>1</td></tr><tr><td>1</td><td>0</td><td>0</td><td>1</td><td>1</td></tr><tr><td>1</td><td>1</td><td>1</td><td>1</td><td>0</td></tr></table></div>
+</section>
+
+<section id="quiz">
+<h2 class="title">🧠 <span>Quiz</span> lógico</h2>
+<p class="subtitle">Comprueba cuánto aprendiste.</p>
+<div class="quiz">
+<div class="question"><h3>1. ¿Qué valores utiliza la lógica binaria?</h3><label class="option"><input type="radio" name="q1" value="a"> 0 y 1</label><label class="option"><input type="radio" name="q1" value="b"> 1 y 2</label><label class="option"><input type="radio" name="q1" value="c"> 2 y 3</label></div>
+<div class="question"><h3>2. ¿Cuándo AND produce 1?</h3><label class="option"><input type="radio" name="q2" value="a"> Cuando todas las entradas son 1</label><label class="option"><input type="radio" name="q2" value="b"> Cuando una entrada es 1</label><label class="option"><input type="radio" name="q2" value="c"> Cuando todas son 0</label></div>
+<div class="question"><h3>3. ¿Qué hace NOT?</h3><label class="option"><input type="radio" name="q3" value="a"> Invierte la entrada</label><label class="option"><input type="radio" name="q3" value="b"> Suma las entradas</label><label class="option"><input type="radio" name="q3" value="c"> Multiplica las entradas</label></div>
+<button onclick="checkQuiz()">COMPROBAR RESPUESTAS</button><div id="score"></div>
+</div>
+</section>
+
+<footer><p>⚡ <strong>LOGIC 3D LAB</strong></p><p>Proyecto educativo • Informática • Noveno Grado</p></footer>
+
+<script>
+let gates={andA:0,andB:0,orA:0,orB:0,xorA:0,xorB:0,nandA:0,nandB:0,norA:0,norB:0,notA:0};
+function changeInput(name,button){
+gates[name]=gates[name]===0?1:0;button.textContent=gates[name];
+button.classList.toggle("active",gates[name]===1);calculateAll();
+}
+function calculateAll(){
+document.getElementById("andOutput").textContent=gates.andA&&gates.andB?1:0;
+document.getElementById("orOutput").textContent=gates.orA||gates.orB?1:0;
+document.getElementById("xorOutput").textContent=gates.xorA!==gates.xorB?1:0;
+document.getElementById("nandOutput").textContent=!(gates.nandA&&gates.nandB)?1:0;
+document.getElementById("norOutput").textContent=!(gates.norA||gates.norB)?1:0;
+document.getElementById("notOutput").textContent=gates.notA===0?1:0;
+}
+function checkQuiz(){
+let score=0;
+let q1=document.querySelector('input[name="q1"]:checked'),q2=document.querySelector('input[name="q2"]:checked'),q3=document.querySelector('input[name="q3"]:checked');
+if(q1&&q1.value==="a")score++;if(q2&&q2.value==="a")score++;if(q3&&q3.value==="a")score++;
+document.getElementById("score").textContent=score===3?"🏆 ¡PERFECTO! 3/3":score===2?"👏 ¡Muy bien! 2/3":score===1?"📚 1/3 — Sigue practicando.":"💡 0/3 — ¡Vuelve a intentarlo!";
+}
+</script>
+</body>
+</html>
